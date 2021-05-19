@@ -28,7 +28,7 @@ namespace GrpcGreeterClient
 
                 for (int i = 0; i < 10; i++)
                 {
-                    var helloRequest = new HelloRequest { Name = "Edinei"};
+                    var helloRequest = new HelloRequest { Name = "Edinei" };
                     await call.RequestStream.WriteAsync(helloRequest);
                     Console.WriteLine("Send " + helloRequest);
                 }
