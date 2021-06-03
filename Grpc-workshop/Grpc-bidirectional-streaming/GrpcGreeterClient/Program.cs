@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Grpc.Net.Client;
@@ -10,7 +11,16 @@ namespace GrpcGreeterClient
     {
         static async Task Main(string[] args)
         {
-            var channel = GrpcChannel.ForAddress("https://localhost:5001");
+            var serverAddress = "https://localhost:5001";
+
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
+                // The following statement allows you to call insecure services. To be used only in development environments.
+                AppContext.SetSwitch(
+                    "System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+                serverAddress = "http://localhost:5000";
+            }
+
+            var channel = GrpcChannel.ForAddress(serverAddress);
             var client = new Greeter.GreeterClient(channel);
             Console.WriteLine("Enter para continuar: ");
             Console.ReadKey();
